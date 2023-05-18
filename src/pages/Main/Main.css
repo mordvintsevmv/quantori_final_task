@@ -1,0 +1,67 @@
+.main {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-image: url("../../assets/dna-background.png");
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
+}
+
+.main__info {
+    position: absolute;
+
+    top: 162px;
+    right: 130px;
+
+    width: 300px;
+}
+
+.main__title {
+    margin-bottom: 11px;
+}
+
+.main__description {
+    margin-bottom: 30px;
+}
+
+.main__login-btn {
+    padding: 10px 18px;
+
+    width: 158px;
+    height: 48px;
+
+    background: #FFFFFF;
+
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    color: #175BC0;
+
+    border-radius: 24px;
+
+    cursor: pointer;
+}
+
+.main__login-btn:hover {
+    background: #E1EDFD;
+}
+
+.main__login-btn:active {
+    background: #DCEDFD;
+}
+
+.main__login-btn:disabled {
+    background: #D3D3D3;
+    color: #FFFFFF;
+    opacity: 0.5;
+}
+
+@media screen and (min-width: 1281px) {
+    .main__info {
+        right: 180px;
+    }
+}

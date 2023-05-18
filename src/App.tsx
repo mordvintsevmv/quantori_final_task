@@ -1,12 +1,14 @@
 import "./App.css"
 
-import { Fragment } from "react"
+import { Route, Routes } from "react-router-dom"
+
+import Main from "./pages/Main/Main.tsx"
 
 const App = () => {
   return (
-    <Fragment>
-      <h1>{"Your final task"}</h1>
-    </Fragment>
+    <Routes>
+      <Route path="/" element={<Main />} />
+    </Routes>
   )
 }
 
