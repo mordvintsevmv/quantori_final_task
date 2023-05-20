@@ -9,6 +9,8 @@
     height: 48px;
 
     background: #FFFFFF;
+
+    border-bottom: 1px solid #D8E7FF;
 }
 
 .header__auth{
