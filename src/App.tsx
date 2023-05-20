@@ -1,13 +1,14 @@
 import "./App.css"
 
 import { useEffect } from "react"
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import { onAuthStateChanged } from "firebase/auth"
 
 import { auth } from "./api/firebase.ts"
 import { useTypedDispatch } from "./hooks/reduxHooks.ts"
 import Auth from "./pages/Auth/Auth.tsx"
 import Main from "./pages/Main/Main.tsx"
+import NotFound from "./pages/NotFound/NotFound.tsx"
 import { login, logout } from "./redux/slices/authSlice.ts"
 
 const App = () => {
@@ -39,6 +40,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Main />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/not-found" element={<NotFound />} />
+      <Route path="*" element={<Navigate to="/not-found" />} />
     </Routes>
   )
 }
