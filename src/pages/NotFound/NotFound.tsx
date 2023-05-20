@@ -4,12 +4,19 @@ import { FC, Fragment } from "react"
 import { useNavigate } from "react-router-dom"
 
 import Header from "../../components/Header/Header.tsx"
+import { useTypedSelector } from "../../hooks/reduxHooks.ts"
 
 const NotFound: FC = () => {
   const navigate = useNavigate()
 
+  const { user } = useTypedSelector((state) => state.auth)
+
   const handleBackClick = () => {
-    navigate("/search")
+    if (user) {
+      navigate("/search")
+    } else {
+      navigate("/")
+    }
   }
 
   return (
@@ -23,7 +30,7 @@ const NotFound: FC = () => {
             className="button not-found__back-btn"
             onClick={handleBackClick}
           >
-            {"Back to Search"}
+            {user ? "Back to Search" : "Back to Main"}
           </button>
         </div>
       </div>
