@@ -33,3 +33,28 @@ h2{
 
   color: #000000;
 }
+
+.button{
+  padding: 10px 18px;
+
+  border-radius: 8px;
+
+  background: rgba(60, 134, 244, 0.2);
+}
+
+
+.button:hover{
+  background: rgba(60, 134, 244, .25);
+}
+
+.button:active{
+  background: #3C86F4;
+  color: #FFFFFF;
+}
+
+.button:disabled{
+  background: #CFCFCF;
+  color: #FFFFFF;
+
+  cursor: default;
+}
