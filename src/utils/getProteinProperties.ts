@@ -25,10 +25,6 @@ export const getLocationString = (protein: Protein): string => {
 }
 
 export const getGenesArray = (protein: Protein): string[] => {
-  if (protein.primaryAccession === "Q9Y238") {
-    console.log(protein)
-  }
-
   if (Array.isArray(protein.genes)) {
     const genes = protein.genes.map((gene) =>
       gene?.geneName?.value ? gene.geneName.value : "",
