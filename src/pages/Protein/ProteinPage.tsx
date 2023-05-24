@@ -51,7 +51,7 @@ const ProteinPage: FC = () => {
       window.navigator.clipboard
         .writeText(protein.sequence.value)
         .then(() => {
-          toast.info("Sequence copied!", {
+          return toast.info("Sequence copied!", {
             position: "top-right",
             autoClose: 3000,
             closeOnClick: true,
@@ -71,10 +71,21 @@ const ProteinPage: FC = () => {
 
   useEffect(() => {
     if (id) {
-      uniprotSearch.get(id).then((response) => {
-        console.log(response.data)
-        setProtein(response.data)
-      })
+      uniprotSearch
+        .get(id)
+        .then((response) => {
+          setProtein(response.data)
+
+          return response.data
+        })
+        .catch(() => {
+          toast.error("Loading failed1", {
+            position: "top-right",
+            autoClose: 3000,
+            closeOnClick: true,
+            theme: "light",
+          })
+        })
     }
   }, [id])
 
