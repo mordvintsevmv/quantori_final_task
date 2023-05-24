@@ -1,0 +1,195 @@
+.protein-page {
+    position: relative;
+
+    padding: 0 130px;
+    margin-top: 30px;
+}
+
+.protein-page__back-btn {
+    position: absolute;
+    top: 2px;
+    left: 80px;
+
+    width: 25px;
+}
+
+.protein-page__header {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: left;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.protein-page__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 30px;
+
+    color: #000000;
+}
+
+.protein-page__organism {
+    padding: 2px 12px;
+
+    background: #D8E7FF;
+    border-radius: 12px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+
+    color: #2B2B2B;
+}
+
+.protein-page__description {
+    margin-top: 12px;
+}
+
+.protein-page__description-block {
+    margin-bottom: 7px;
+    min-width: 180px;
+}
+
+.protein-page__description-title {
+
+    margin-bottom: 4px;
+
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+
+    color: #616161;
+}
+
+.protein-page__description-text {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+
+    color: #2B2B2B;
+}
+
+.protein-page__tabs {
+    margin-top: 12px;
+}
+
+.react-tabs {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.react-tabs__tab-list {
+    padding: 0;
+}
+
+.react-tabs__tab {
+    display: inline-block;
+    position: relative;
+    list-style: none;
+    padding: 12px 23px;
+    cursor: pointer;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #9F9F9F;
+}
+
+.react-tabs__tab--selected {
+    color: #3C86F4;
+    border-bottom: 2px solid #3C86F4;
+}
+
+.react-tabs__tab--disabled {
+    color: GrayText;
+    cursor: not-allowed;
+}
+
+.react-tabs__tab:focus {
+    outline: none;
+}
+
+.react-tabs__tab-panel {
+    display: none;
+}
+
+.react-tabs__tab-panel--selected {
+    margin-top: 24px;
+    display: block;
+}
+
+.protein-details__params {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 21px;
+
+    margin-top: 8px;
+}
+
+.protein-details__sequence {
+    width: 1020px;
+    position: relative;
+    margin-top: 22px;
+}
+
+.protein-details__sequence-copy {
+    position: absolute;
+
+    top: -25px;
+    right: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+
+    color: #000000;
+}
+
+.protein-details__sequence-copy img {
+    width: 16px;
+}
+
+.protein-details__sequence-copy:hover {
+    filter: invert(0.3);
+}
+
+.protein-details__sequence-copy:active {
+    filter: invert(0.5);
+}
+
+.protein-details__sequence-copy:disabled {
+    filter: opacity(0.5);
+    cursor: not-allowed;
+}
+
+.protein-details__sequence-text {
+    width: 1020px;
+
+    padding: 12px;
+    background: #F2F2F2;
+
+    border-radius: 8px;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+
+    color: #000000;
+}

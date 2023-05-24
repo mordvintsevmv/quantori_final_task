@@ -9,6 +9,7 @@ import { useTypedDispatch } from "./hooks/reduxHooks.ts"
 import Auth from "./pages/Auth/Auth.tsx"
 import Main from "./pages/Main/Main.tsx"
 import NotFound from "./pages/NotFound/NotFound.tsx"
+import ProteinPage from "./pages/Protein/ProteinPage.tsx"
 import Search from "./pages/Search/Search.tsx"
 import { login, logout } from "./redux/slices/authSlice.ts"
 
@@ -42,6 +43,7 @@ const App = () => {
       <Route path="/" element={<Main />} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/search" element={<Search />} />
+      <Route path="/protein/:id" element={<ProteinPage />} />
       <Route path="/not-found" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/not-found" />} />
     </Routes>
