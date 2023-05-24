@@ -26,5 +26,17 @@ export const GenesCellRenderer: FC<TableCellProps> = ({ cellData }) => {
 }
 
 export const OrganismCellRenderer: FC<TableCellProps> = ({ cellData }) => {
-  return <div className="search-table__organism">{cellData}</div>
+  return (
+    <div className="search-table__organism" title={cellData}>
+      {cellData}
+    </div>
+  )
+}
+
+export const LocationCellRenderer: FC<TableCellProps> = ({ cellData }) => {
+  return (
+    <div className="search-table__location" title={cellData}>
+      {cellData}
+    </div>
+  )
 }

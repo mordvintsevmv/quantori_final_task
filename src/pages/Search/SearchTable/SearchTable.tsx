@@ -14,6 +14,7 @@ import { Protein } from "../../../types/Protein.ts"
 import {
   EntryCellRenderer,
   GenesCellRenderer,
+  LocationCellRenderer,
   OrganismCellRenderer,
 } from "./cellRenderers.tsx"
 import { HeaderSortableRenderer } from "./headerRenderers.tsx"
@@ -90,26 +91,27 @@ const SearchTable: FC = () => {
               headerRenderer={HeaderSortableRenderer}
               dataKey="genes"
               label="Genes"
-              width={166}
+              width={196}
               cellRenderer={GenesCellRenderer}
             />
             <Column
               headerRenderer={HeaderSortableRenderer}
               dataKey="organism"
               label="Organism"
-              width={166}
+              width={190}
               cellRenderer={OrganismCellRenderer}
             />
             <Column
               dataKey="subcellular_location"
               label="Subcellular Location"
-              width={191}
+              width={190}
+              cellRenderer={LocationCellRenderer}
             />
             <Column
               headerRenderer={HeaderSortableRenderer}
               dataKey="length"
               label="Length"
-              width={156}
+              width={100}
             />
           </Table>
         )}

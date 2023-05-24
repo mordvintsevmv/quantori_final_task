@@ -100,14 +100,35 @@
 }
 
 .search-table__organism {
+  margin: 0 auto;
   background: #D8E7FF;
   border-radius: 12px;
   padding: 2px 12px;
 
   width: fit-content;
   max-width: 150px;
-  overflow: scroll;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
+
+.search-table__location {
+  width: 160px;
+  height: 40px;
+
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 
 .ReactVirtualized__Table__headerRow {
   border-radius: 8px;
