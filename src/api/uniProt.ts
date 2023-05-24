@@ -3,7 +3,7 @@ import axios from "axios"
 import { Protein, ProteinResponse } from "../types/Protein.ts"
 import { getProteinObject } from "../utils/getProteinProperties.ts"
 
-const uniprotSearch = axios.create({
+export const uniprotSearch = axios.create({
   baseURL: "https://rest.uniprot.org/uniprotkb",
 })
 
