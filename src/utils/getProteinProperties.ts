@@ -1,39 +1,51 @@
-import { Protein } from "../types/Protein.ts"
+import { Protein, ProteinResponse } from "../types/Protein.ts"
 
-export const getLocationString = (protein: Protein): string => {
-  if (protein.comments) {
-    const comments = protein.comments
-
-    const locations = comments.map((comment) =>
-      comment.commentType === "SUBCELLULAR LOCATION"
+export const getLocationString = (protein: ProteinResponse): string => {
+  if (protein.comments && protein.comments.length > 0) {
+    const locations = protein.comments.map((comment) => {
+      return comment.commentType === "SUBCELLULAR LOCATION" &&
+        comment.subcellularLocations
         ? comment.subcellularLocations
-        : null,
-    )
+            .map((sub_location) => sub_location.location.value)
+            .join("; ")
+        : ""
+    })
 
-    const location_value = locations
-      .flat(Number.POSITIVE_INFINITY)
-      .map((location) => {
-        return location && "location" in location ? location.location.value : ""
-      })
-
-    const unique_location = [...new Set(location_value.join(", ").split(","))]
-
-    return unique_location.length > 1 ? unique_location.join(", ") : "-"
+    return locations.join(", ")
   } else {
-    return "-"
+    return ""
   }
 }
 
-export const getGenesArray = (protein: Protein): string[] => {
-  if (Array.isArray(protein.genes)) {
-    const genes = protein.genes.map((gene) =>
-      gene?.geneName?.value ? gene.geneName.value : "",
-    )
+export const getGenesString = (protein: ProteinResponse): string => {
+  if (protein.genes) {
+    const gene_names = protein.genes.map((gene) => {
+      const name = gene?.geneName?.value ? gene.geneName.value : ""
+      let synonym_name = ""
 
-    return genes.join("").length > 0 ? genes : ["-"]
-  } else if (protein.genes?.geneName) {
-    return [protein.genes.geneName.value]
+      if (gene.synonyms) {
+        synonym_name = gene.synonyms.map((synonym) => synonym.value).join(", ")
+      }
+
+      return synonym_name.length > 0 ? `${name}, ${synonym_name}` : name
+    })
+
+    return gene_names.join("; ")
   } else {
-    return ["-"]
+    return ""
+  }
+}
+
+export const getProteinObject = (protein: ProteinResponse): Protein => {
+  const genes = getGenesString(protein)
+  const subcellular_location = getLocationString(protein)
+
+  return {
+    entry: protein.primaryAccession,
+    entry_names: protein.uniProtkbId,
+    genes,
+    organism: protein.organism.scientificName,
+    subcellular_location,
+    length: protein.sequence.length,
   }
 }

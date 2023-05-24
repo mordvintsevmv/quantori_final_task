@@ -1,13 +1,16 @@
 import "./SearchTable.scss"
 
-import { FC, useEffect, useState } from "react"
+import { FC, Fragment, useState } from "react"
+import { InfiniteLoader } from "react-virtualized/dist/es/InfiniteLoader"
 import { Column, Table } from "react-virtualized/dist/es/Table"
 
-import { useTypedSelector } from "../../../hooks/reduxHooks.ts"
+import { getMoreUniprotProteinsAsync } from "../../../api/uniProt.ts"
 import {
-  getGenesArray,
-  getLocationString,
-} from "../../../utils/getProteinProperties.ts"
+  useTypedDispatch,
+  useTypedSelector,
+} from "../../../hooks/reduxHooks.ts"
+import { setLink, setProteins } from "../../../redux/slices/proteinSlice.ts"
+import { Protein } from "../../../types/Protein.ts"
 import {
   EntryCellRenderer,
   GenesCellRenderer,
@@ -15,90 +18,104 @@ import {
 } from "./cellRenderers.tsx"
 import { HeaderSortableRenderer } from "./headerRenderers.tsx"
 
-interface ProteinRow {
-  index: number
-  entry: string
-  entry_names: string
-  genes: string[]
-  organism: string
-  subcellular_location: string
-  length: number
-}
-
 const SearchTable: FC = () => {
-  const { proteins } = useTypedSelector((state) => state.proteins)
+  const { totalResults, proteins, link } = useTypedSelector(
+    (state) => state.proteins,
+  )
 
-  const [rowData, setRowData] = useState<ProteinRow[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  useEffect(() => {
-    setRowData(
-      proteins.map((protein, index) => {
-        const genes = getGenesArray(protein)
-        const location = getLocationString(protein)
+  const dispatch = useTypedDispatch()
 
-        return {
-          index: index + 1,
-          entry: protein.primaryAccession,
-          entry_names: protein.uniProtkbId,
-          genes,
-          organism: protein.organism.scientificName,
-          subcellular_location: location,
-          length: protein.sequence.length,
-        } as ProteinRow
-      }),
-    )
-  }, [proteins])
+  const isRowLoaded = ({ index }: { index: number }) => {
+    return !!proteins[index]
+  }
+
+  const loadMoreRows = (): Promise<Protein[]> => {
+    if (link) {
+      setIsLoading(true)
+
+      return getMoreUniprotProteinsAsync(link).then((response) => {
+        dispatch(setProteins([...proteins, ...response.proteins]))
+        dispatch(setLink(response.link))
+        setIsLoading(false)
+
+        return response.proteins
+      })
+    } else {
+      return new Promise((resolve) => resolve(proteins))
+    }
+  }
 
   return (
-    <Table
-      width={1020}
-      height={550}
-      headerHeight={40}
-      rowHeight={48}
-      rowCount={rowData.length}
-      rowGetter={({ index }) => rowData[index]}
-      className="search-table"
-    >
-      <Column dataKey="index" label="#" width={48} />
-      <Column
-        headerRenderer={HeaderSortableRenderer}
-        dataKey="entry"
-        label="Entry"
-        width={115}
-        cellRenderer={EntryCellRenderer}
-      />
-      <Column
-        headerRenderer={HeaderSortableRenderer}
-        dataKey="entry_names"
-        label="Entry Names"
-        width={166}
-      />
-      <Column
-        headerRenderer={HeaderSortableRenderer}
-        dataKey="genes"
-        label="Genes"
-        width={166}
-        cellRenderer={GenesCellRenderer}
-      />
-      <Column
-        headerRenderer={HeaderSortableRenderer}
-        dataKey="organism"
-        label="Organism"
-        width={166}
-        cellRenderer={OrganismCellRenderer}
-      />
-      <Column
-        dataKey="subcellular_location"
-        label="Subcellular Location"
-        width={191}
-      />
-      <Column
-        headerRenderer={HeaderSortableRenderer}
-        dataKey="length"
-        label="Length"
-        width={156}
-      />
-    </Table>
+    <Fragment>
+      <InfiniteLoader
+        loadMoreRows={loadMoreRows}
+        isRowLoaded={isRowLoaded}
+        rowCount={totalResults}
+        key="search-table"
+      >
+        {({ onRowsRendered, registerChild }) => (
+          <Table
+            width={1020}
+            height={550}
+            headerHeight={40}
+            rowHeight={48}
+            rowCount={proteins.length}
+            rowGetter={({ index }) => proteins[index]}
+            className="search-table"
+            onRowsRendered={onRowsRendered}
+            ref={registerChild}
+          >
+            <Column
+              dataKey="index"
+              label="#"
+              width={50}
+              cellRenderer={({ rowIndex }) => <div>{rowIndex + 1}</div>}
+            />
+            <Column
+              headerRenderer={HeaderSortableRenderer}
+              dataKey="entry"
+              label="Entry"
+              width={125}
+              cellRenderer={EntryCellRenderer}
+            />
+            <Column
+              headerRenderer={HeaderSortableRenderer}
+              dataKey="entry_names"
+              label="Entry Names"
+              width={166}
+            />
+            <Column
+              headerRenderer={HeaderSortableRenderer}
+              dataKey="genes"
+              label="Genes"
+              width={166}
+              cellRenderer={GenesCellRenderer}
+            />
+            <Column
+              headerRenderer={HeaderSortableRenderer}
+              dataKey="organism"
+              label="Organism"
+              width={166}
+              cellRenderer={OrganismCellRenderer}
+            />
+            <Column
+              dataKey="subcellular_location"
+              label="Subcellular Location"
+              width={191}
+            />
+            <Column
+              headerRenderer={HeaderSortableRenderer}
+              dataKey="length"
+              label="Length"
+              width={156}
+            />
+          </Table>
+        )}
+      </InfiniteLoader>
+      {isLoading ? <div className="search-table__loading-line" /> : null}
+    </Fragment>
   )
 }
 

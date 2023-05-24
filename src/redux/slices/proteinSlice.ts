@@ -8,6 +8,7 @@ interface proteinState {
   proteins: Array<Protein>
   searchQuery: string | null
   totalResults: number
+  link: string | null
   status: statusType
 }
 
@@ -15,6 +16,7 @@ const initialState: proteinState = {
   proteins: [],
   searchQuery: null,
   totalResults: 0,
+  link: null,
   status: statusType.IDLE,
 }
 
@@ -22,9 +24,11 @@ export const fetchProteins = createAsyncThunk(
   "proteins/fetchProteins",
   async (query: string, thunkAPI) => {
     try {
-      const { proteins, totalResults } = await getUniprotProteinsAsync(query)
+      const { proteins, totalResults, link } = await getUniprotProteinsAsync(
+        query,
+      )
 
-      return thunkAPI.fulfillWithValue({ proteins, totalResults, query })
+      return thunkAPI.fulfillWithValue({ proteins, totalResults, link, query })
     } catch {
       return thunkAPI.rejectWithValue("ERROR")
     }
@@ -34,18 +38,27 @@ export const fetchProteins = createAsyncThunk(
 const proteinSlice = createSlice({
   name: "proteins",
   initialState,
-  reducers: {},
+  reducers: {
+    setProteins: (state, action) => {
+      state.proteins = action.payload
+    },
+    setLink: (state, action) => {
+      state.link = action.payload
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchProteins.pending, (state) => {
       state.proteins = []
       state.totalResults = 0
       state.searchQuery = null
+      state.link = null
       state.status = statusType.LOADING
     })
     builder.addCase(fetchProteins.fulfilled, (state, action) => {
       state.proteins = action.payload.proteins
       state.totalResults = action.payload.totalResults
       state.searchQuery = action.payload.query
+      state.link = action.payload.link
       state.status = statusType.SUCCESS
     })
     builder.addCase(fetchProteins.rejected, (state) => {
@@ -58,3 +71,4 @@ const proteinSlice = createSlice({
 })
 
 export const proteinReducer = proteinSlice.reducer
+export const { setProteins, setLink } = proteinSlice.actions

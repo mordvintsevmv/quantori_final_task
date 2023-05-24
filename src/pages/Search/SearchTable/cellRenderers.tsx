@@ -11,18 +11,17 @@ export const EntryCellRenderer: FC<TableCellProps> = ({ cellData }) => {
 }
 
 export const GenesCellRenderer: FC<TableCellProps> = ({ cellData }) => {
-  const genes = cellData.join(", ")
-  const firstSpaceIndex = genes.indexOf(" ")
+  const firstSpaceIndex = cellData.indexOf(" ")
 
-  return cellData.length > 1 ? (
+  return firstSpaceIndex !== -1 ? (
     <Fragment>
       <span className="search-table__row--bold">
-        {genes.slice(0, Math.max(0, firstSpaceIndex))}
+        {cellData.slice(0, Math.max(0, firstSpaceIndex))}
       </span>
-      <span>{genes.slice(Math.max(0, firstSpaceIndex))}</span>
+      <span>{cellData.slice(Math.max(0, firstSpaceIndex))}</span>
     </Fragment>
   ) : (
-    <span className="search-table__row--bold">{genes}</span>
+    <span className="search-table__row--bold">{cellData}</span>
   )
 }
 

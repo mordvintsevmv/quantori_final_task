@@ -1,8 +1,17 @@
 export interface Protein {
+  entry: string
+  entry_names: string
+  genes: string
+  organism: string
+  subcellular_location: string
+  length: number
+}
+
+export interface ProteinResponse {
   primaryAccession: string
   uniProtkbId: string
   organism: Organism
-  genes?: Gene[] | Gene
+  genes?: Gene[]
   comments?: Comment[]
   sequence: Sequence
 }
