@@ -10,10 +10,13 @@ const NotFound: FC = () => {
   const navigate = useNavigate()
 
   const { user } = useTypedSelector((state) => state.auth)
+  const { searchQuery } = useTypedSelector((state) => state.proteins)
 
   const handleBackClick = () => {
     if (user) {
-      navigate("/search")
+      searchQuery
+        ? navigate(`/search/?query=${searchQuery}`)
+        : navigate(`/search`)
     } else {
       navigate("/")
     }
