@@ -1,8 +1,8 @@
 export interface Protein {
-  entry: string
-  entry_names: string
-  genes: string
-  organism: string
+  accession: string
+  id: string
+  gene: string
+  organism_name: string
   subcellular_location: string
   length: number
 }

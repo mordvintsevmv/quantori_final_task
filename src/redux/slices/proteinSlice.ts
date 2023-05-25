@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 import { getUniprotProteinsAsync } from "../../api/uniProt.ts"
 import { Protein } from "../../types/Protein.ts"
+import { sortType } from "../../types/sortType.ts"
 import { statusType } from "../../types/statusType.ts"
 
 interface proteinState {
@@ -10,6 +11,7 @@ interface proteinState {
   totalResults: number
   link: string | null
   status: statusType
+  sort: sortType
 }
 
 const initialState: proteinState = {
@@ -18,14 +20,19 @@ const initialState: proteinState = {
   totalResults: 0,
   link: null,
   status: statusType.IDLE,
+  sort: {
+    sortDirection: null,
+    sortBy: null,
+  },
 }
 
 export const fetchProteins = createAsyncThunk(
   "proteins/fetchProteins",
-  async (query: string, thunkAPI) => {
+  async ({ query, sort }: { query: string; sort: sortType }, thunkAPI) => {
     try {
       const { proteins, totalResults, link } = await getUniprotProteinsAsync(
         query,
+        sort,
       )
 
       return thunkAPI.fulfillWithValue({ proteins, totalResults, link, query })
@@ -44,6 +51,9 @@ const proteinSlice = createSlice({
     },
     setLink: (state, action) => {
       state.link = action.payload
+    },
+    setSort: (state, { payload }: PayloadAction<sortType>) => {
+      state.sort = payload
     },
   },
   extraReducers: (builder) => {
@@ -71,4 +81,4 @@ const proteinSlice = createSlice({
 })
 
 export const proteinReducer = proteinSlice.reducer
-export const { setProteins, setLink } = proteinSlice.actions
+export const { setProteins, setLink, setSort } = proteinSlice.actions

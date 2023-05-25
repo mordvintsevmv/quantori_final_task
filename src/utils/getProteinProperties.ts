@@ -48,10 +48,10 @@ export const getProteinObject = (
   const subcellular_location = getLocationString(protein)
 
   return {
-    entry: protein.primaryAccession,
-    entry_names: protein.uniProtkbId,
-    genes,
-    organism: protein.organism.scientificName,
+    accession: protein.primaryAccession,
+    id: protein.uniProtkbId,
+    gene: genes,
+    organism_name: protein.organism.scientificName,
     subcellular_location,
     length: protein.sequence.length,
   }

@@ -1,6 +1,7 @@
 import axios from "axios"
 
 import { Protein, ProteinResponse } from "../types/Protein.ts"
+import { sortType } from "../types/sortType.ts"
 import { getProteinObject } from "../utils/getProteinProperties.ts"
 
 export const uniprotSearch = axios.create({
@@ -12,13 +13,19 @@ const searchFields =
 
 export const getUniprotProteinsAsync = async (
   query: string,
+  sort: sortType,
 ): Promise<{
   totalResults: number
   proteins: Protein[]
   link: string | null
 }> => {
+  const sortQuery =
+    sort.sortBy && sort.sortDirection
+      ? `&sort=${sort.sortBy}%20${sort.sortDirection.toLowerCase()}`
+      : ""
+
   const response = await uniprotSearch.get(
-    `search?${searchFields}&query=${query}&size=500`,
+    `search?${searchFields}&query=${query}&size=500${sortQuery}`,
   )
 
   const link: string | null = response.headers.link

@@ -13,7 +13,9 @@ import SearchPlaceholder from "./SearchPlaceholder.tsx"
 import SearchResults from "./SearchResults.tsx"
 
 const Search: FC = () => {
-  const { totalResults, status } = useTypedSelector((state) => state.proteins)
+  const { totalResults, status, sort } = useTypedSelector(
+    (state) => state.proteins,
+  )
 
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -39,8 +41,8 @@ const Search: FC = () => {
     setSearchParams(searchParams)
 
     searchInput
-      ? dispatch(fetchProteins(searchInput))
-      : dispatch(fetchProteins("*"))
+      ? dispatch(fetchProteins({ query: searchInput, sort }))
+      : dispatch(fetchProteins({ query: "*", sort }))
   }
 
   const handleSearchEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -52,9 +54,9 @@ const Search: FC = () => {
   useEffect(() => {
     if (searchQuery) {
       setSearchInput(searchQuery)
-      dispatch(fetchProteins(searchQuery))
+      dispatch(fetchProteins({ query: searchQuery, sort }))
     }
-  }, [dispatch, searchQuery])
+  }, [dispatch, searchQuery, sort])
 
   return (
     <Fragment>

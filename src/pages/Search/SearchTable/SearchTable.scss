@@ -201,6 +201,20 @@
   cursor: not-allowed;
 }
 
+.search-table__sortable-header-btn--active{
+  background: rgba(60, 134, 244, .12);
+  border-radius: 2px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img{
+    height: 12px;
+  }
+}
+
+
 .search-table__loading-line {
   width: 900px;
   height: 3px;
