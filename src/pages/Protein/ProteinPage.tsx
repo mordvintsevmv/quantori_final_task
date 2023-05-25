@@ -198,7 +198,7 @@ const ProteinPage: FC = () => {
 
             <TabPanel>
               <h3>{"Feature viewer"}</h3>
-              <protvista-uniprot accession="P05067" />
+              <protvista-uniprot accession={id} />
             </TabPanel>
 
             <TabPanel>
