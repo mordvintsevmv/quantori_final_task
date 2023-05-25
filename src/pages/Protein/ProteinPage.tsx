@@ -107,9 +107,12 @@ const ProteinPage: FC = () => {
             closeOnClick: true,
             theme: "light",
           })
+          setTimeout(() => {
+            navigate("/search")
+          }, 4000)
         })
     }
-  }, [id])
+  }, [id, navigate])
 
   return (
     <Fragment>
@@ -221,7 +224,7 @@ const ProteinPage: FC = () => {
 
             <TabPanel>
               {publications &&
-                publications?.map((publication) => (
+                publications.map((publication) => (
                   <PublicationComponent
                     key={publication.citation.id}
                     className="protein-details__publication"

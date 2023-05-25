@@ -39,9 +39,11 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
           className="publication__authors"
           title={publication.citation.authors.join(", ")}
         >
-          {publication.citation.authors.map((author) => {
+          {publication.citation.authors.map((author, index) => {
             return (
-              <Fragment>
+              <Fragment
+                key={publication.citation.id + "-" + author + "-" + index}
+              >
                 <span className="publication__author-item">{author}</span>
                 <span>{", "}</span>
               </Fragment>
@@ -61,7 +63,6 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
       </div>
 
       {/* Cited for */}
-
       <div className="publication__description">
         <span className="publication__description-title">{"Cited for: "}</span>
         <span className="publication__description-text">
@@ -74,7 +75,6 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
       </div>
 
       {/* Source */}
-
       <div className="publication__description">
         <span className="publication__description-title">{"Source: "}</span>
         <span className="publication__description-text">
@@ -84,6 +84,7 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
         </span>
       </div>
 
+      {/* Links */}
       <div className="publication__links">
         <a
           href={
