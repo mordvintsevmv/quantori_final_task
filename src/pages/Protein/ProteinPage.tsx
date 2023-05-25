@@ -5,6 +5,8 @@ import { FC, Fragment, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import { toast, ToastContainer } from "react-toastify"
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import ProtvistaUniprot from "protvista-uniprot"
 
 import { uniprotSearch } from "../../api/uniProt.ts"
@@ -17,7 +19,10 @@ import { getGenesString } from "../../utils/getProteinProperties.ts"
 import back_img from "./assets/back.svg"
 import copy_img from "./assets/copy.svg"
 
-window.customElements.define("protvista-uniprot", ProtvistaUniprot)
+window.customElements.define(
+  "protvista-uniprot",
+  ProtvistaUniprot as CustomElementConstructor,
+)
 
 const month_array: string[] = [
   "January",
@@ -219,6 +224,8 @@ const ProteinPage: FC = () => {
             </TabPanel>
 
             <TabPanel>
+              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+              {/* @ts-ignore */}
               <protvista-uniprot accession={id} />
             </TabPanel>
 
