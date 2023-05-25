@@ -3,23 +3,30 @@ import "./Search.css"
 import React, { FC, Fragment, useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
+import Filters from "../../components/Filters/Filters.tsx"
 import Header from "../../components/Header/Header.tsx"
 import Loading from "../../components/Loading/Loading.tsx"
 import { useTypedDispatch, useTypedSelector } from "../../hooks/reduxHooks.ts"
-import { fetchProteins } from "../../redux/slices/proteinSlice.ts"
+import {
+  fetchProteins,
+  setFilters,
+  setSort,
+} from "../../redux/slices/proteinSlice.ts"
+import { initialFilters } from "../../types/Filter.ts"
 import { statusType } from "../../types/statusType.ts"
 import options_img from "./assets/options.svg"
 import SearchPlaceholder from "./SearchPlaceholder.tsx"
 import SearchResults from "./SearchResults.tsx"
 
 const Search: FC = () => {
-  const { totalResults, status, sort } = useTypedSelector(
+  const { totalResults, status, sort, filterQuery } = useTypedSelector(
     (state) => state.proteins,
   )
 
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [searchInput, setSearchInput] = useState<string>("")
+  const [isFiltersOpened, setIsFiltersOpened] = useState<boolean>(false)
 
   const searchQuery = searchParams.get("query")
 
@@ -39,10 +46,14 @@ const Search: FC = () => {
     }
 
     setSearchParams(searchParams)
+    dispatch(setFilters(initialFilters))
+    dispatch(setSort({ sortBy: null, sortDirection: null }))
 
     searchInput
-      ? dispatch(fetchProteins({ query: searchInput, sort }))
-      : dispatch(fetchProteins({ query: "*", sort }))
+      ? dispatch(
+          fetchProteins({ query: searchInput, sort, filters: filterQuery }),
+        )
+      : dispatch(fetchProteins({ query: "*", sort, filters: filterQuery }))
   }
 
   const handleSearchEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -51,12 +62,18 @@ const Search: FC = () => {
     }
   }
 
+  const handleToggleFilters = () => {
+    setIsFiltersOpened(!isFiltersOpened)
+  }
+
   useEffect(() => {
     if (searchQuery) {
       setSearchInput(searchQuery)
-      dispatch(fetchProteins({ query: searchQuery, sort }))
+      dispatch(
+        fetchProteins({ query: searchQuery, sort, filters: filterQuery }),
+      )
     }
-  }, [dispatch, searchQuery, sort])
+  }, [dispatch, searchQuery, sort, filterQuery])
 
   return (
     <Fragment>
@@ -74,9 +91,20 @@ const Search: FC = () => {
           <button className="button search__search-btn" onClick={startSearch}>
             {"Search"}
           </button>
-          <button className="icon-button search__filter-btn" disabled={true}>
+          <button
+            className={`search__filters-btn ${
+              isFiltersOpened ? "search__filters-btn--active" : ""
+            }}`}
+            onClick={handleToggleFilters}
+          >
             <img src={options_img} alt="Filters" />
           </button>
+          {isFiltersOpened && (
+            <Filters
+              setFiltersOpened={setIsFiltersOpened}
+              className="search__filters"
+            />
+          )}
         </div>
 
         <div className="search__content">

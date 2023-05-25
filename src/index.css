@@ -67,6 +67,32 @@ h3 {
   cursor: not-allowed;
 }
 
+.button--transparent {
+  padding: 10px 18px;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #3C86F4;
+}
+
+.button--transparent:hover {
+  background: rgba(60, 134, 244, .05);
+}
+
+.button--transparent:active {
+  background: #3C86F4;
+  color: #FFFFFF;
+}
+
+.button--transparent:disabled {
+  background: #CFCFCF;
+  color: #FFFFFF;
+
+  cursor: not-allowed;
+}
+
 .icon-button {
   display: flex;
 
@@ -89,6 +115,14 @@ h3 {
   background: rgba(60, 134, 244, .35);
 }
 
+.icon-button--active{
+  background: #3C86F4;
+}
+
+.icon-button--active img{
+  filter: invert(0) brightness(0) invert(100);
+}
+
 .icon-button:disabled {
   background: #CFCFCF;
 
@@ -102,7 +136,6 @@ h3 {
 .icon-button--transparent{
   width: 30px;
   height: 30px;
-
 }
 
 .icon-button--transparent:hover {
