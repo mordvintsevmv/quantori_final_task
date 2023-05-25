@@ -5,6 +5,7 @@ import { FC, Fragment, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import { toast, ToastContainer } from "react-toastify"
+import ProtvistaUniprot from "protvista-uniprot"
 
 import { uniprotSearch } from "../../api/uniProt.ts"
 import Header from "../../components/Header/Header.tsx"
@@ -13,6 +14,8 @@ import { ProteinDetailed } from "../../types/ProteinDetailed.ts"
 import { getGenesString } from "../../utils/getProteinProperties.ts"
 import back_img from "./assets/back.svg"
 import copy_img from "./assets/copy.svg"
+
+window.customElements.define("protvista-uniprot", ProtvistaUniprot)
 
 const month_array: string[] = [
   "January",
@@ -135,7 +138,7 @@ const ProteinPage: FC = () => {
             </TabList>
 
             <TabPanel className="protein-page__details-tab protein-details">
-              <h2>{"Sequence"}</h2>
+              <h3>{"Sequence"}</h3>
               <div className="protein-details__params">
                 <div>
                   <div className="protein-page__description-block">
@@ -194,11 +197,12 @@ const ProteinPage: FC = () => {
             </TabPanel>
 
             <TabPanel>
-              <h2>{"Feature viewer"}</h2>
+              <h3>{"Feature viewer"}</h3>
+              <protvista-uniprot accession="P05067" />
             </TabPanel>
 
             <TabPanel>
-              <h2>{"Publications"}</h2>
+              <h3>{"Publications"}</h3>
             </TabPanel>
           </Tabs>
         </div>
