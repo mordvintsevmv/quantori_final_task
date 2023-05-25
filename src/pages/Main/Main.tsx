@@ -1,20 +1,10 @@
 import "./Main.css"
 
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { useTypedSelector } from "../../hooks/reduxHooks.ts"
-
 const Main: FC = () => {
-  const { user } = useTypedSelector((state) => state.auth)
-
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (user) {
-      navigate("/search")
-    }
-  }, [navigate, user])
 
   const handleLoginClick = () => {
     navigate("/auth")
