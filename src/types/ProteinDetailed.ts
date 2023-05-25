@@ -92,7 +92,7 @@ export interface Comment {
   subcellularLocations?: SubcellularLocation[]
   events?: string[]
   isoforms?: Isoform[]
-  note: any
+  note: Text[]
   disease?: Disease
   molecule?: string
   sequenceCautionType?: string
@@ -101,7 +101,7 @@ export interface Comment {
 }
 
 export interface Text {
-  evidences: Evidence3[]
+  evidences?: Evidence3[]
   value: string
 }
 
