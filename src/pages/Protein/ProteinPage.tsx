@@ -10,7 +10,9 @@ import ProtvistaUniprot from "protvista-uniprot"
 import { uniprotSearch } from "../../api/uniProt.ts"
 import Header from "../../components/Header/Header.tsx"
 import Loading from "../../components/Loading/Loading.tsx"
+import PublicationComponent from "../../components/PublicationComponent/PublicationComponent.tsx"
 import { ProteinDetailed } from "../../types/ProteinDetailed.ts"
+import { Publication } from "../../types/Publication.ts"
 import { getGenesString } from "../../utils/getProteinProperties.ts"
 import back_img from "./assets/back.svg"
 import copy_img from "./assets/copy.svg"
@@ -42,6 +44,7 @@ const ProteinPage: FC = () => {
   const { id } = useParams()
 
   const [protein, setProtein] = useState<ProteinDetailed | null>(null)
+  const [publications, setPublications] = useState<Publication[] | null>(null)
 
   const navigate = useNavigate()
 
@@ -82,7 +85,23 @@ const ProteinPage: FC = () => {
           return response.data
         })
         .catch(() => {
-          toast.error("Loading failed1", {
+          toast.error("Loading failed!", {
+            position: "top-right",
+            autoClose: 3000,
+            closeOnClick: true,
+            theme: "light",
+          })
+        })
+
+      uniprotSearch
+        .get(`${id}/publications`)
+        .then((response) => {
+          setPublications(response.data.results)
+
+          return response.data.results
+        })
+        .catch(() => {
+          toast.error("Publications loading failed!", {
             position: "top-right",
             autoClose: 3000,
             closeOnClick: true,
@@ -197,12 +216,18 @@ const ProteinPage: FC = () => {
             </TabPanel>
 
             <TabPanel>
-              <h3>{"Feature viewer"}</h3>
               <protvista-uniprot accession={id} />
             </TabPanel>
 
             <TabPanel>
-              <h3>{"Publications"}</h3>
+              {publications &&
+                publications?.map((publication) => (
+                  <PublicationComponent
+                    key={publication.citation.id}
+                    className="protein-details__publication"
+                    publication={publication}
+                  />
+                ))}
             </TabPanel>
           </Tabs>
         </div>
