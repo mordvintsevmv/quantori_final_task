@@ -1,6 +1,9 @@
 import { Protein, ProteinResponse } from "../types/Protein.ts"
+import { ProteinDetailed } from "../types/ProteinDetailed.ts"
 
-export const getLocationString = (protein: ProteinResponse): string => {
+export const getLocationString = (
+  protein: ProteinResponse | ProteinDetailed,
+): string => {
   if (protein.comments && protein.comments.length > 0) {
     const locations = protein.comments.map((comment) => {
       return comment.commentType === "SUBCELLULAR LOCATION" &&
@@ -17,7 +20,9 @@ export const getLocationString = (protein: ProteinResponse): string => {
   }
 }
 
-export const getGenesString = (protein: ProteinResponse): string => {
+export const getGenesString = (
+  protein: ProteinResponse | ProteinDetailed,
+): string => {
   if (protein.genes) {
     const gene_names = protein.genes.map((gene) => {
       const name = gene?.geneName?.value ? gene.geneName.value : ""
@@ -36,7 +41,9 @@ export const getGenesString = (protein: ProteinResponse): string => {
   }
 }
 
-export const getProteinObject = (protein: ProteinResponse): Protein => {
+export const getProteinObject = (
+  protein: ProteinResponse | ProteinDetailed,
+): Protein => {
   const genes = getGenesString(protein)
   const subcellular_location = getLocationString(protein)
 

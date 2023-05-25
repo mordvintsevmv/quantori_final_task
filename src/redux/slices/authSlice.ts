@@ -1,13 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
+import { statusType } from "../../types/statusType.ts"
 import { User } from "../../types/User.ts"
 
 interface authState {
   user: User | null
+  authStatus: statusType
 }
 
 const initialState: authState = {
   user: null,
+  authStatus: statusType.IDLE,
 }
 
 export const authSlice = createSlice({
@@ -16,9 +19,11 @@ export const authSlice = createSlice({
   reducers: {
     login: (state, { payload }: PayloadAction<User>) => {
       state.user = payload
+      state.authStatus = statusType.SUCCESS
     },
     logout: (state) => {
       state.user = null
+      state.authStatus = statusType.SUCCESS
     },
   },
 })
