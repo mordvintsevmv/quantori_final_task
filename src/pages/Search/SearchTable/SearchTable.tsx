@@ -148,6 +148,7 @@ const SearchTable: FC = () => {
               dataKey="length"
               label="Length"
               width={100}
+              cellRenderer={({ cellData }) => cellData.toLocaleString()}
             />
           </Table>
         )}
