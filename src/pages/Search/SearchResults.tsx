@@ -14,7 +14,10 @@ const SearchResults: FC = () => {
   return (
     <div className="search__results">
       <h3 className="search__count">
-        {totalResults + ' Search Results for "' + searchQuery + '"'}
+        {totalResults.toLocaleString() +
+          ' Search Results for "' +
+          searchQuery +
+          '"'}
       </h3>
 
       <SearchTable />

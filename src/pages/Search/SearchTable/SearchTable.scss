@@ -195,11 +195,27 @@
 .search-table__sortable-header-btn {
   width: 24px;
   height: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 2px;
+
+  background: transparent;
+  img{
+    height: 12px;
+  }
 }
 
 .search-table__sortable-header-btn:disabled {
   cursor: not-allowed;
 }
+
+.search-table__sortable-header-btn--active{
+  background: rgba(60, 134, 244, .12);
+}
+
 
 .search-table__loading-line {
   width: 900px;

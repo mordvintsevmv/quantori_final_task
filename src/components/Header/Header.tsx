@@ -4,15 +4,18 @@ import { FC } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { logoutUserAsync } from "../../api/firebase.ts"
-import { useTypedSelector } from "../../hooks/reduxHooks.ts"
+import { useTypedDispatch, useTypedSelector } from "../../hooks/reduxHooks.ts"
+import { resetSearch } from "../../redux/slices/proteinSlice.ts"
 
 const Header: FC = () => {
   const { user } = useTypedSelector((state) => state.auth)
 
   const navigate = useNavigate()
+  const dispatch = useTypedDispatch()
 
   const handleLogoutClickAsync = async () => {
     await logoutUserAsync()
+    dispatch(resetSearch())
     navigate("/")
   }
 

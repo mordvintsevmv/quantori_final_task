@@ -9,8 +9,13 @@ import {
   useTypedDispatch,
   useTypedSelector,
 } from "../../../hooks/reduxHooks.ts"
-import { setLink, setProteins } from "../../../redux/slices/proteinSlice.ts"
+import {
+  setLink,
+  setProteins,
+  setSort,
+} from "../../../redux/slices/proteinSlice.ts"
 import { Protein } from "../../../types/Protein.ts"
+import { SortByType, SortDirectionType } from "../../../types/sortType.ts"
 import {
   EntryCellRenderer,
   GenesCellRenderer,
@@ -20,7 +25,7 @@ import {
 import { HeaderSortableRenderer } from "./headerRenderers.tsx"
 
 const SearchTable: FC = () => {
-  const { totalResults, proteins, link } = useTypedSelector(
+  const { totalResults, proteins, link, sort } = useTypedSelector(
     (state) => state.proteins,
   )
 
@@ -48,6 +53,32 @@ const SearchTable: FC = () => {
     }
   }
 
+  const _sort = ({
+    sortBy,
+    sortDirection,
+  }: {
+    sortDirection: SortDirectionType
+    sortBy: string
+  }) => {
+    if (sort.sortBy === sortBy && sort.sortDirection === "DESC") {
+      dispatch(
+        setSort({
+          sortDirection: null,
+          sortBy: null,
+        }),
+      )
+    } else if (
+      ["accession", "id", "gene", "organism_name", "length"].includes(sortBy)
+    ) {
+      dispatch(
+        setSort({
+          sortDirection,
+          sortBy: sortBy as SortByType,
+        }),
+      )
+    }
+  }
+
   return (
     <Fragment>
       <InfiniteLoader
@@ -67,36 +98,40 @@ const SearchTable: FC = () => {
             className="search-table"
             onRowsRendered={onRowsRendered}
             ref={registerChild}
+            sort={_sort}
+            sortBy={sort.sortBy ? sort.sortBy : undefined}
+            sortDirection={sort.sortDirection ? sort.sortDirection : undefined}
           >
             <Column
               dataKey="index"
               label="#"
               width={50}
               cellRenderer={({ rowIndex }) => <div>{rowIndex + 1}</div>}
+              disableSort={true}
             />
             <Column
               headerRenderer={HeaderSortableRenderer}
-              dataKey="entry"
+              dataKey="accession"
               label="Entry"
               width={125}
               cellRenderer={EntryCellRenderer}
             />
             <Column
               headerRenderer={HeaderSortableRenderer}
-              dataKey="entry_names"
+              dataKey="id"
               label="Entry Names"
               width={166}
             />
             <Column
               headerRenderer={HeaderSortableRenderer}
-              dataKey="genes"
+              dataKey="gene"
               label="Genes"
               width={196}
               cellRenderer={GenesCellRenderer}
             />
             <Column
               headerRenderer={HeaderSortableRenderer}
-              dataKey="organism"
+              dataKey="organism_name"
               label="Organism"
               width={190}
               cellRenderer={OrganismCellRenderer}
@@ -106,12 +141,14 @@ const SearchTable: FC = () => {
               label="Subcellular Location"
               width={190}
               cellRenderer={LocationCellRenderer}
+              disableSort={true}
             />
             <Column
               headerRenderer={HeaderSortableRenderer}
               dataKey="length"
               label="Length"
               width={100}
+              cellRenderer={({ cellData }) => cellData.toLocaleString()}
             />
           </Table>
         )}
