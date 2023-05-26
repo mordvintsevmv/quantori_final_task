@@ -42,6 +42,19 @@ export const getGenesString = (
   }
 }
 
+export const getProteinName = (protein: ProteinDetailed): string => {
+  return (
+    protein.proteinDescription.recommendedName?.fullName.value ||
+    protein.proteinDescription.alternativeNames
+      ?.map((name) => name.fullName.value)
+      .join(", ") ||
+    protein.proteinDescription.submissionNames
+      ?.map((name) => name.fullName.value)
+      .join(", ") ||
+    "N/A"
+  )
+}
+
 export const getProteinObject = (
   protein: ProteinResponse | ProteinDetailed,
 ): Protein => {
