@@ -20,13 +20,17 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
   }>({ PubMed: null, DOI: null })
 
   useEffect(() => {
+    let PubMedId = null
+    let DoiID = null
+
     publication.citation.citationCrossReferences?.forEach((crossReference) => {
       if (crossReference.database === "PubMed") {
-        setCrossReferences({ ...crossReferences, PubMed: crossReference.id })
+        PubMedId = crossReference.id
       } else if (crossReference.database === "DOI") {
-        setCrossReferences({ ...crossReferences, DOI: crossReference.id })
+        DoiID = crossReference.id
       }
     })
+    setCrossReferences({ PubMed: PubMedId, DOI: DoiID })
   }, [publication])
 
   return (
