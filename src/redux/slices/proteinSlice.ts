@@ -69,6 +69,18 @@ const proteinSlice = createSlice({
     setFilters: (state, { payload }: PayloadAction<FilterValues>) => {
       state.filterQuery = payload
     },
+    resetSearch: (state) => {
+      state.proteins = []
+      state.totalResults = 0
+      state.searchQuery = null
+      state.filterQuery = initialFilters
+      state.sort = {
+        sortBy: null,
+        sortDirection: null,
+      }
+      state.link = null
+      state.status = statusType.IDLE
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProteins.pending, (state) => {
@@ -95,5 +107,5 @@ const proteinSlice = createSlice({
 })
 
 export const proteinReducer = proteinSlice.reducer
-export const { setProteins, setLink, setSort, setFilters } =
+export const { setProteins, setLink, setSort, resetSearch, setFilters } =
   proteinSlice.actions

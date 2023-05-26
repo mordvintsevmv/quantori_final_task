@@ -3,7 +3,10 @@ import axios from "axios"
 import { FilterValues } from "../types/Filter.ts"
 import { Protein, ProteinResponse } from "../types/Protein.ts"
 import { sortType } from "../types/sortType.ts"
-import { getProteinObject } from "../utils/getProteinProperties.ts"
+import {
+  getFilterQuery,
+  getProteinObject,
+} from "../utils/getProteinProperties.ts"
 
 export const uniprotSearch = axios.create({
   baseURL: "https://rest.uniprot.org/uniprotkb",
@@ -26,29 +29,7 @@ export const getUniprotProteinsAsync = async (
       ? `&sort=${sort.sortBy}%20${sort.sortDirection.toLowerCase()}`
       : ""
 
-  let filterQuery = ""
-
-  if (filters.gene !== "") {
-    filterQuery += ` AND (gene:${filters.gene})`
-  }
-
-  if (filters.model_organism !== "") {
-    filterQuery += ` AND (model_organism:${filters.model_organism})`
-  }
-
-  if (filters.length_from !== "" || filters.length_to !== "") {
-    filterQuery += ` AND (length:%5B${filters.length_from || "*"} TO ${
-      filters.length_to || "*"
-    }%5D)`
-  }
-
-  if (filters.annotation_score !== "") {
-    filterQuery += ` AND (annotation_score:${filters.annotation_score})`
-  }
-
-  if (filters.proteins_with !== "") {
-    filterQuery += ` AND (proteins_with:${filters.proteins_with})`
-  }
+  const filterQuery = getFilterQuery(filters)
 
   const response = await uniprotSearch.get(
     `search?${searchFields}&query=${query}${filterQuery}&size=500${sortQuery}`,

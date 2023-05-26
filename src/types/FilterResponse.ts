@@ -33,7 +33,7 @@ export interface Result {
   references: Reference[]
   uniProtKBCrossReferences: UniProtKbcrossReference[]
   sequence: Sequence
-  extraAttributes: ExtraAttributes
+  extraAttributes: never
 }
 
 export interface EntryAudit {
@@ -144,7 +144,7 @@ export interface Comment {
   texts?: Text[]
   commentType: string
   interactions?: Interaction[]
-  note: any
+  note: never
   subcellularLocations?: SubcellularLocation[]
   disease?: Disease
   resourceName?: string
@@ -489,65 +489,4 @@ export interface Sequence {
   molWeight: number
   crc64: string
   md5: string
-}
-
-export interface ExtraAttributes {
-  countByCommentType: CountByCommentType
-  countByFeatureType: CountByFeatureType
-  uniParcId: string
-}
-
-export interface CountByCommentType {
-  FUNCTION?: number
-  SUBUNIT?: number
-  "SUBCELLULAR LOCATION"?: number
-  "ALTERNATIVE PRODUCTS"?: number
-  "TISSUE SPECIFICITY"?: number
-  DISEASE?: number
-  MISCELLANEOUS?: number
-  "SEQUENCE CAUTION"?: number
-  INTERACTION?: number
-  PTM?: number
-  "WEB RESOURCE"?: number
-  SIMILARITY?: number
-  "RNA EDITING"?: number
-  INDUCTION?: number
-  DOMAIN?: number
-  CAUTION?: number
-  "CATALYTIC ACTIVITY"?: number
-  "ACTIVITY REGULATION"?: number
-  PATHWAY?: number
-  POLYMORPHISM?: number
-  "DISRUPTION PHENOTYPE"?: number
-  COFACTOR?: number
-  "BIOPHYSICOCHEMICAL PROPERTIES"?: number
-}
-
-export interface CountByFeatureType {
-  Chain: number
-  Region?: number
-  "Compositional bias"?: number
-  "Alternative sequence"?: number
-  "Natural variant"?: number
-  "Sequence conflict"?: number
-  Repeat?: number
-  Motif?: number
-  "Modified residue"?: number
-  Mutagenesis?: number
-  Helix?: number
-  "Beta strand"?: number
-  Turn?: number
-  Transmembrane?: number
-  "Topological domain"?: number
-  "Coiled coil"?: number
-  Domain?: number
-  "Zinc finger"?: number
-  "Cross-link"?: number
-  "Active site"?: number
-  "Initiator methionine"?: number
-  "Binding site"?: number
-  Site?: number
-  Lipidation?: number
-  "Disulfide bond"?: number
-  "DNA binding"?: number
 }

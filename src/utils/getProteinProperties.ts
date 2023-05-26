@@ -1,3 +1,4 @@
+import { FilterValues } from "../types/Filter.ts"
 import { Protein, ProteinResponse } from "../types/Protein.ts"
 import { ProteinDetailed } from "../types/ProteinDetailed.ts"
 
@@ -55,4 +56,36 @@ export const getProteinObject = (
     subcellular_location,
     length: protein.sequence.length,
   }
+}
+
+export const getFilterQuery = (filters: FilterValues) => {
+  let filterQuery = ""
+
+  if (filters.gene !== "") {
+    filterQuery += ` AND (gene:${filters.gene})`
+  }
+
+  if (filters.model_organism !== "") {
+    filterQuery += ` AND (model_organism:${filters.model_organism})`
+  }
+
+  if (filters.length_from !== "" || filters.length_to !== "") {
+    filterQuery += ` AND (length:%5B${filters.length_from || "*"} TO ${
+      filters.length_to || "*"
+    }%5D)`
+  }
+
+  if (filters.annotation_score !== "") {
+    filterQuery += ` AND (annotation_score:${filters.annotation_score})`
+  }
+
+  if (filters.proteins_with !== "") {
+    filterQuery += ` AND (proteins_with:${filters.proteins_with})`
+  }
+
+  return filterQuery
+}
+
+export const hasAnyFilter = (filters: FilterValues) => {
+  return Object.values(filters).some((value) => value !== "")
 }

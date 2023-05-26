@@ -7,8 +7,11 @@ import { Field, Form, Formik } from "formik"
 
 import { useTypedDispatch, useTypedSelector } from "../../hooks/reduxHooks.ts"
 import { setFilters } from "../../redux/slices/proteinSlice.ts"
-import { FilterValues } from "../../types/Filter.ts"
+import { FilterValues, initialFilters } from "../../types/Filter.ts"
 import { FilterResponse, FilterValue } from "../../types/FilterResponse.ts"
+import { getFilterQuery } from "../../utils/getProteinProperties.ts"
+import Loading from "../Loading/Loading.tsx"
+import reset_img from "./assets/reset.svg"
 
 interface FiltersProps {
   setFiltersOpened: (value: boolean) => void
@@ -26,21 +29,31 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
     score: FilterValue[]
   }>(null)
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const dispatch = useTypedDispatch()
 
   const handleSubmit = (values: FilterValues) => {
-    dispatch(setFilters(values))
     setFiltersOpened(false)
+    dispatch(setFilters(values))
   }
 
   const handleClose = () => {
     setFiltersOpened(false)
   }
 
+  const handleReset = () => {
+    setFiltersOpened(false)
+    dispatch(setFilters(initialFilters))
+  }
+
   useEffect(() => {
+    const filters = getFilterQuery(filterQuery)
+
+    setIsLoading(true)
     axios
       .get(
-        `https://rest.uniprot.org/uniprotkb/search?facets=model_organism,proteins_with,annotation_score&query=(${searchQuery})`,
+        `https://rest.uniprot.org/uniprotkb/search?facets=model_organism,proteins_with,annotation_score&query=${searchQuery}${filters}`,
       )
       .then((response: AxiosResponse<FilterResponse>) => {
         let organism: FilterValue[] = []
@@ -61,6 +74,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
           }
         })
         setAvailableFilters({ organism, protein_with, score })
+        setIsLoading(false)
 
         return { organism, protein_with, score }
       })
@@ -72,12 +86,23 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
           theme: "light",
         })
       })
-  }, [searchQuery])
+  }, [searchQuery, filterQuery])
 
   return (
     <div className={`filters-block ${className}`}>
+      {isLoading && <Loading />}
+
       <ToastContainer />
-      <h2 className="filters-block__title">{"Filters"}</h2>
+
+      <div className="filters-block__header">
+        <h2 className="filters-block__title">{"Filters"}</h2>
+        <button
+          className="icon-button--transparent filters-block__reset-btn"
+          onClick={handleReset}
+        >
+          <img src={reset_img} alt="reset" />
+        </button>
+      </div>
 
       <Formik initialValues={filterQuery} onSubmit={handleSubmit}>
         {({ dirty }) => (
@@ -105,7 +130,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
                 element="select"
                 as="select"
               >
-                <option value="">{"Any"}</option>
+                <option value="">{"Select an option"}</option>
                 {availableFilters &&
                   availableFilters.organism.map((organism) => {
                     return (
@@ -130,6 +155,8 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
                 />
               </div>
 
+              <hr />
+
               <div className="filters__form-element">
                 <Field
                   id="filter-length-to"
@@ -152,7 +179,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
                 className="filters__input"
                 as="select"
               >
-                <option value="">{"Any"}</option>
+                <option value="">{"Select an option"}</option>
                 {availableFilters &&
                   availableFilters.score.map((score) => {
                     return (
@@ -175,7 +202,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
                 className="filters__input"
                 as="select"
               >
-                <option value="">{"Any"}</option>
+                <option value="">{"Select"}</option>
                 {availableFilters &&
                   availableFilters.protein_with.map((option) => {
                     return (

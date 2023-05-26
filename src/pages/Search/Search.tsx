@@ -14,6 +14,7 @@ import {
 } from "../../redux/slices/proteinSlice.ts"
 import { initialFilters } from "../../types/Filter.ts"
 import { statusType } from "../../types/statusType.ts"
+import { hasAnyFilter } from "../../utils/getProteinProperties.ts"
 import options_img from "./assets/options.svg"
 import SearchPlaceholder from "./SearchPlaceholder.tsx"
 import SearchResults from "./SearchResults.tsx"
@@ -45,6 +46,7 @@ const Search: FC = () => {
       searchParams.set("query", "*")
     }
 
+    setIsFiltersOpened(false)
     setSearchParams(searchParams)
     dispatch(setFilters(initialFilters))
     dispatch(setSort({ sortBy: null, sortDirection: null }))
@@ -73,7 +75,7 @@ const Search: FC = () => {
         fetchProteins({ query: searchQuery, sort, filters: filterQuery }),
       )
     }
-  }, [dispatch, searchQuery, sort, filterQuery])
+  }, [dispatch, sort, filterQuery])
 
   return (
     <Fragment>
@@ -91,14 +93,18 @@ const Search: FC = () => {
           <button className="button search__search-btn" onClick={startSearch}>
             {"Search"}
           </button>
-          <button
-            className={`search__filters-btn ${
-              isFiltersOpened ? "search__filters-btn--active" : ""
-            }}`}
-            onClick={handleToggleFilters}
-          >
-            <img src={options_img} alt="Filters" />
-          </button>
+          <div className="search__filters-btn-wrapper">
+            <button
+              className={`search__filters-btn ${
+                isFiltersOpened ? "search__filters-btn--active" : ""
+              } ${
+                hasAnyFilter(filterQuery) ? "search__filters-btn--selected" : ""
+              }`}
+              onClick={handleToggleFilters}
+            >
+              <img src={options_img} alt="Filters" />
+            </button>
+          </div>
           {isFiltersOpened && (
             <Filters
               setFiltersOpened={setIsFiltersOpened}
