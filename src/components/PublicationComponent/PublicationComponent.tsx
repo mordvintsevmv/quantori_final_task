@@ -35,33 +35,36 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
 
   return (
     <div className={`publication ${className}`}>
-      <h3 className="publication__title">{publication.citation.title}</h3>
+      <h3 className="publication__title">
+        {publication.citation?.title || "No Title"}
+      </h3>
 
       {/* Authors */}
-      {publication.citation.authors && (
-        <div
-          className="publication__authors"
-          title={publication.citation.authors.join(", ")}
-        >
-          {publication.citation.authors.map((author, index) => {
-            return (
-              <Fragment
-                key={publication.citation.id + "-" + author + "-" + index}
-              >
-                <span className="publication__author-item">{author}</span>
-                <span>{", "}</span>
-              </Fragment>
-            )
-          })}
-        </div>
-      )}
-
+      <div
+        className="publication__authors"
+        title={publication.citation?.authors?.join(", ")}
+      >
+        {publication.citation?.authors?.map((author, index) => {
+          return (
+            <Fragment
+              key={publication.citation?.id + "-" + author + "-" + index}
+            >
+              <span className="publication__author-item">{author}</span>
+              <span>
+                {publication.citation?.authors &&
+                  index + 1 < publication.citation?.authors?.length &&
+                  ", "}
+              </span>
+            </Fragment>
+          )
+        })}
+      </div>
       {/* Categories */}
       <div className="publication__description">
         <span className="publication__description-title">{"Categories: "}</span>
         <span className="publication__description-text">
-          {publication.references.map((reference) => {
-            return reference.sourceCategories.join(", ")
+          {publication.references?.map((reference) => {
+            return reference.sourceCategories?.join(", ") || "N/A"
           })}
         </span>
       </div>
@@ -70,10 +73,8 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
       <div className="publication__description">
         <span className="publication__description-title">{"Cited for: "}</span>
         <span className="publication__description-text">
-          {publication.references.map((reference) => {
-            return reference.referencePositions
-              ? reference.referencePositions.join(", ")
-              : ""
+          {publication.references?.map((reference) => {
+            return reference.referencePositions?.join(", ") || "N/A"
           })}
         </span>
       </div>
@@ -82,8 +83,8 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
       <div className="publication__description">
         <span className="publication__description-title">{"Source: "}</span>
         <span className="publication__description-text">
-          {publication.references.map((reference) => {
-            return reference.source ? reference.source.name : ""
+          {publication.references?.map((reference) => {
+            return reference.source?.name || "N/A"
           })}
         </span>
       </div>
@@ -142,11 +143,11 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
             role="link"
             disabled={!crossReferences.DOI}
           >
-            {publication.citation.journal &&
-              `${publication.citation.journal} ${publication.citation.volume}: ${publication.citation.firstPage}-${publication.citation.lastPage} (${publication.citation.publicationDate})`}
+            {publication.citation?.journal &&
+              `${publication.citation?.journal} ${publication.citation?.volume}: ${publication.citation?.firstPage}-${publication.citation?.lastPage} (${publication.citation?.publicationDate})`}
             {!publication.citation.journal &&
               publication.citation.publicationDate &&
-              `Publication (${publication.citation.publicationDate})`}
+              `Publication (${publication.citation?.publicationDate || "N/A"})`}
             <img src={link_img} alt="PubMed Publication" />
           </button>
         </a>

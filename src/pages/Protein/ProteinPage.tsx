@@ -15,7 +15,10 @@ import Loading from "../../components/Loading/Loading.tsx"
 import PublicationComponent from "../../components/PublicationComponent/PublicationComponent.tsx"
 import { ProteinDetailed } from "../../types/ProteinDetailed.ts"
 import { Publication } from "../../types/Publication.ts"
-import { getGenesString } from "../../utils/getProteinProperties.ts"
+import {
+  getGenesString,
+  getProteinName,
+} from "../../utils/getProteinProperties.ts"
 import back_img from "./assets/back.svg"
 import copy_img from "./assets/copy.svg"
 
@@ -146,13 +149,13 @@ const ProteinPage: FC = () => {
             <div className="protein-page__description-block">
               <div className="protein-page__description-title">{"Protein"}</div>
               <div className="protein-page__description-text">
-                {protein.proteinDescription.recommendedName.fullName.value}
+                {getProteinName(protein)}
               </div>
             </div>
             <div className="protein-page__description-block">
               <div className="protein-page__description-title">{"Gene"}</div>
               <div className="protein-page__description-text">
-                {getGenesString(protein)}
+                {getGenesString(protein) || "N/A"}
               </div>
             </div>
           </div>

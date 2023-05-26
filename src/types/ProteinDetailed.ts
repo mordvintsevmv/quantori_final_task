@@ -34,8 +34,9 @@ export interface Organism {
 }
 
 export interface ProteinDescription {
-  recommendedName: RecommendedName
-  alternativeNames: AlternativeName[]
+  recommendedName?: RecommendedName
+  alternativeNames?: AlternativeName[]
+  submissionNames?: SubmissionName[]
 }
 
 export interface RecommendedName {
@@ -47,12 +48,12 @@ export interface FullName {
 }
 
 export interface AlternativeName {
-  fullName: FullName2
+  fullName: FullName
   shortNames: ShortName[]
 }
 
-export interface FullName2 {
-  value: string
+export interface SubmissionName {
+  fullName: FullName
 }
 
 export interface ShortName {
