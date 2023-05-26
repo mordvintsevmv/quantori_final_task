@@ -33,16 +33,16 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
 
   const dispatch = useTypedDispatch()
 
-  const handleSubmit = (values: FilterValues) => {
+  const handleFiltersSubmit = (values: FilterValues) => {
     setFiltersOpened(false)
     dispatch(setFilters(values))
   }
 
-  const handleClose = () => {
+  const handleFiltersClose = () => {
     setFiltersOpened(false)
   }
 
-  const handleReset = () => {
+  const handleFiltersReset = () => {
     setFiltersOpened(false)
     dispatch(setFilters(initialFilters))
   }
@@ -99,15 +99,21 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
         <h2 className="filters-block__title">{"Filters"}</h2>
         <button
           className="icon-button--transparent filters-block__reset-btn"
-          onClick={handleReset}
+          onClick={handleFiltersReset}
         >
           <img src={reset_img} alt="reset" />
         </button>
       </div>
 
-      <Formik initialValues={filterQuery} onSubmit={handleSubmit}>
-        {({ dirty }) => (
-          <Form>
+      <Formik initialValues={filterQuery} onSubmit={handleFiltersSubmit}>
+        {({ dirty, handleSubmit }) => (
+          <Form
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit()
+              }
+            }}
+          >
             {/* Gene Name*/}
             <div className="filters__form-element">
               <label htmlFor="filter-gene-name">{"Gene Name"}</label>
@@ -216,7 +222,10 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
             </div>
 
             <div className="filters__buttons">
-              <button className="button--transparent" onClick={handleClose}>
+              <button
+                className="button--transparent"
+                onClick={handleFiltersClose}
+              >
                 {"Cancel"}
               </button>
               <button className="button" type="submit" disabled={!dirty}>
