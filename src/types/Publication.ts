@@ -29,7 +29,7 @@ export interface CitationCrossReference {
 export interface Reference {
   source: Source
   citationId: string
-  sourceCategories: string[]
+  sourceCategories?: string[]
   referencePositions?: string[]
   referenceNumber?: number
   referenceComments?: ReferenceComment[]
