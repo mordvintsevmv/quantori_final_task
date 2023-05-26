@@ -79,12 +79,13 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
         return { organism, protein_with, score }
       })
       .catch(() => {
-        toast.error("Filter load failed!", {
+        toast.error("Loading failed! Try another filters.", {
           position: "top-right",
           autoClose: 3000,
           closeOnClick: true,
           theme: "light",
         })
+        setIsLoading(false)
       })
   }, [searchQuery, filterQuery])
 
