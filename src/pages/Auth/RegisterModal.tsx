@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useState } from "react"
+import React, { FC, Fragment, useEffect, useState } from "react"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import * as Yup from "yup"
 
@@ -48,6 +48,10 @@ const RegisterModal: FC<RegisterModalProps> = ({ handleSetLogin }) => {
   const handleResetAuthError = () => {
     setAuthError(null)
   }
+
+  useEffect(() => {
+    document.title = "Sign up to Q-1 Search"
+  }, [])
 
   return (
     <Fragment>

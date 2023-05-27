@@ -84,6 +84,10 @@ const ProteinPage: FC = () => {
   }
 
   useEffect(() => {
+    document.title = `${id} Protein`
+  }, [id])
+
+  useEffect(() => {
     if (id) {
       uniprotSearch
         .get(id)

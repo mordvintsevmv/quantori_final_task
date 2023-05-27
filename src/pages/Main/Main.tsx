@@ -1,6 +1,6 @@
 import "./Main.css"
 
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 const Main: FC = () => {
@@ -9,6 +9,10 @@ const Main: FC = () => {
   const handleLoginClick = () => {
     navigate("/auth")
   }
+
+  useEffect(() => {
+    document.title = "Q-1 Search"
+  }, [])
 
   return (
     <div className="main">

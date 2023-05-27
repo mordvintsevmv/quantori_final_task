@@ -77,6 +77,12 @@ const Search: FC = () => {
     }
   }, [dispatch, sort, filterQuery])
 
+  useEffect(() => {
+    document.title = searchQuery
+      ? `Searching for "${searchQuery}"`
+      : `Q-1 Search`
+  }, [searchQuery])
+
   return (
     <Fragment>
       <Header />
