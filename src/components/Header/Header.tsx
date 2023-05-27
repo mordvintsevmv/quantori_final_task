@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 
 import { logoutUserAsync } from "../../api/firebase.ts"
 import { useTypedDispatch, useTypedSelector } from "../../hooks/reduxHooks.ts"
-import { resetSearch } from "../../redux/slices/proteinSlice.ts"
+import { resetSearch } from "../../redux/slices/searchSlice.ts"
 
 const Header: FC = () => {
   const { user } = useTypedSelector((state) => state.auth)

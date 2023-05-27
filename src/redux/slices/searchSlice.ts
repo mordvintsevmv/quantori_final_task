@@ -5,8 +5,9 @@ import { FilterValues, initialFilters } from "../../types/Filter.ts"
 import { Protein } from "../../types/Protein.ts"
 import { sortType } from "../../types/sortType.ts"
 import { statusType } from "../../types/statusType.ts"
+import { RootState } from "../store.ts"
 
-interface proteinState {
+interface searchState {
   proteins: Array<Protein>
   searchQuery: string | null
   totalResults: number
@@ -16,7 +17,7 @@ interface proteinState {
   filterQuery: FilterValues
 }
 
-const initialState: proteinState = {
+const initialState: searchState = {
   proteins: [],
   searchQuery: null,
   totalResults: 0,
@@ -31,30 +32,25 @@ const initialState: proteinState = {
 
 export const fetchProteins = createAsyncThunk(
   "proteins/fetchProteins",
-  async (
-    {
-      query,
-      sort,
-      filters,
-    }: { query: string; sort: sortType; filters: FilterValues },
-    thunkAPI,
-  ) => {
+  async (__, thunkAPI) => {
     try {
+      const { search } = thunkAPI.getState() as RootState
+
       const { proteins, totalResults, link } = await getUniprotProteinsAsync(
-        query,
-        sort,
-        filters,
+        search.searchQuery || "",
+        search.sort,
+        search.filterQuery,
       )
 
-      return thunkAPI.fulfillWithValue({ proteins, totalResults, link, query })
+      return thunkAPI.fulfillWithValue({ proteins, totalResults, link })
     } catch {
       return thunkAPI.rejectWithValue("ERROR")
     }
   },
 )
 
-const proteinSlice = createSlice({
-  name: "proteins",
+const searchSlice = createSlice({
+  name: "search",
   initialState,
   reducers: {
     setProteins: (state, action) => {
@@ -68,6 +64,9 @@ const proteinSlice = createSlice({
     },
     setFilters: (state, { payload }: PayloadAction<FilterValues>) => {
       state.filterQuery = payload
+    },
+    setSearchQuery: (state, { payload }: PayloadAction<string>) => {
+      state.searchQuery = payload
     },
     resetSearch: (state) => {
       state.proteins = []
@@ -86,14 +85,12 @@ const proteinSlice = createSlice({
     builder.addCase(fetchProteins.pending, (state) => {
       state.proteins = []
       state.totalResults = 0
-      state.searchQuery = null
       state.link = null
       state.status = statusType.LOADING
     })
     builder.addCase(fetchProteins.fulfilled, (state, action) => {
       state.proteins = action.payload.proteins
       state.totalResults = action.payload.totalResults
-      state.searchQuery = action.payload.query
       state.link = action.payload.link
       state.status = statusType.SUCCESS
     })
@@ -106,6 +103,12 @@ const proteinSlice = createSlice({
   },
 })
 
-export const proteinReducer = proteinSlice.reducer
-export const { setProteins, setLink, setSort, resetSearch, setFilters } =
-  proteinSlice.actions
+export const searchReducer = searchSlice.reducer
+export const {
+  setProteins,
+  setLink,
+  setSort,
+  resetSearch,
+  setFilters,
+  setSearchQuery,
+} = searchSlice.actions

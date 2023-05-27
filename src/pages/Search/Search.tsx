@@ -1,6 +1,6 @@
 import "./Search.css"
 
-import React, { FC, Fragment, useEffect, useState } from "react"
+import React, { FC, Fragment, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 import Filters from "../../components/Filters/Filters.tsx"
@@ -9,10 +9,9 @@ import Loading from "../../components/Loading/Loading.tsx"
 import { useTypedDispatch, useTypedSelector } from "../../hooks/reduxHooks.ts"
 import {
   fetchProteins,
-  setFilters,
-  setSort,
-} from "../../redux/slices/proteinSlice.ts"
-import { initialFilters } from "../../types/Filter.ts"
+  resetSearch,
+  setSearchQuery,
+} from "../../redux/slices/searchSlice.ts"
 import { statusType } from "../../types/statusType.ts"
 import { hasAnyFilter } from "../../utils/getProteinProperties.ts"
 import options_img from "./assets/options.svg"
@@ -20,42 +19,32 @@ import SearchPlaceholder from "./SearchPlaceholder.tsx"
 import SearchResults from "./SearchResults.tsx"
 
 const Search: FC = () => {
-  const { totalResults, status, sort, filterQuery } = useTypedSelector(
-    (state) => state.proteins,
-  )
+  const { totalResults, status, sort, filterQuery, searchQuery } =
+    useTypedSelector((state) => state.search)
 
   const [searchParams, setSearchParams] = useSearchParams()
+  const searchQueryURL = searchParams.get("query")
 
-  const [searchInput, setSearchInput] = useState<string>("")
   const [isFiltersOpened, setIsFiltersOpened] = useState<boolean>(false)
 
-  const searchQuery = searchParams.get("query")
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const dispatch = useTypedDispatch()
 
-  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const input = event.target as HTMLInputElement
-
-    setSearchInput(input.value)
-  }
-
   const startSearch = () => {
-    if (searchInput.length > 0) {
-      searchParams.set("query", searchInput)
+    dispatch(resetSearch())
+
+    if (searchRef.current && searchRef.current.value.trimStart().length > 0) {
+      searchParams.set("query", searchRef.current.value.trimStart().trimEnd())
+      dispatch(setSearchQuery(searchRef.current.value.trimStart().trimEnd()))
     } else {
       searchParams.set("query", "*")
+      dispatch(setSearchQuery("*"))
     }
 
-    setIsFiltersOpened(false)
     setSearchParams(searchParams)
-    dispatch(setFilters(initialFilters))
-    dispatch(setSort({ sortBy: null, sortDirection: null }))
 
-    searchInput
-      ? dispatch(
-          fetchProteins({ query: searchInput, sort, filters: filterQuery }),
-        )
-      : dispatch(fetchProteins({ query: "*", sort, filters: filterQuery }))
+    setIsFiltersOpened(false)
   }
 
   const handleSearchEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,18 +59,20 @@ const Search: FC = () => {
 
   useEffect(() => {
     if (searchQuery) {
-      setSearchInput(searchQuery)
-      dispatch(
-        fetchProteins({ query: searchQuery, sort, filters: filterQuery }),
-      )
+      dispatch(fetchProteins())
     }
-  }, [dispatch, sort, filterQuery])
+  }, [dispatch, sort, filterQuery, searchQuery])
 
   useEffect(() => {
-    document.title = searchQuery
-      ? `Searching for "${searchQuery}"`
+    if (searchQueryURL && searchRef.current) {
+      searchRef.current.value = searchQueryURL
+      dispatch(setSearchQuery(searchQueryURL))
+    }
+
+    document.title = searchQueryURL
+      ? `Searching for "${searchQueryURL}"`
       : `Q-1 Search`
-  }, [searchQuery])
+  }, [dispatch, searchQueryURL])
 
   return (
     <Fragment>
@@ -92,9 +83,8 @@ const Search: FC = () => {
             className="search__input"
             type="text"
             placeholder="Enter search value"
-            onInput={handleSearch}
+            ref={searchRef}
             onKeyDown={handleSearchEnter}
-            value={searchInput}
           />
           <button className="button search__search-btn" onClick={startSearch}>
             {"Search"}

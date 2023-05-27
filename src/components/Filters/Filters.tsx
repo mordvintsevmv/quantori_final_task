@@ -6,7 +6,7 @@ import axios, { AxiosResponse } from "axios"
 import { Field, Form, Formik } from "formik"
 
 import { useTypedDispatch, useTypedSelector } from "../../hooks/reduxHooks.ts"
-import { setFilters } from "../../redux/slices/proteinSlice.ts"
+import { setFilters } from "../../redux/slices/searchSlice.ts"
 import { FilterValues, initialFilters } from "../../types/Filter.ts"
 import { FilterResponse, FilterValue } from "../../types/FilterResponse.ts"
 import { getFilterQuery } from "../../utils/getProteinProperties.ts"
@@ -19,9 +19,7 @@ interface FiltersProps {
 }
 
 const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
-  const { searchQuery, filterQuery } = useTypedSelector(
-    (state) => state.proteins,
-  )
+  const { searchQuery, filterQuery } = useTypedSelector((state) => state.search)
 
   const [availableFilters, setAvailableFilters] = useState<null | {
     organism: FilterValue[]
