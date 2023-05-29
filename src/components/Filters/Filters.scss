@@ -99,7 +99,7 @@
     margin-bottom: 0;
   }
 
-  hr{
+  hr {
     all: unset;
 
     width: 30px;
@@ -109,4 +109,8 @@
   input {
     width: 130px;
   }
+}
+
+.filters__input--error {
+  outline: 2px solid #EC3030;
 }

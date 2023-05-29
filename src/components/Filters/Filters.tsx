@@ -4,9 +4,10 @@ import { FC, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import axios, { AxiosResponse } from "axios"
 import { Field, Form, Formik } from "formik"
+import * as Yup from "yup"
 
 import { useTypedDispatch, useTypedSelector } from "../../hooks/reduxHooks.ts"
-import { setFilters } from "../../redux/slices/proteinSlice.ts"
+import { setFilters } from "../../redux/slices/searchSlice.ts"
 import { FilterValues, initialFilters } from "../../types/Filter.ts"
 import { FilterResponse, FilterValue } from "../../types/FilterResponse.ts"
 import { getFilterQuery } from "../../utils/getProteinProperties.ts"
@@ -18,10 +19,27 @@ interface FiltersProps {
   className?: string
 }
 
+const validationSchema = Yup.object().shape(
+  {
+    length_from: Yup.number().when("length_to", {
+      is: (length_to: number | undefined) => length_to,
+      // eslint-disable-next-line unicorn/no-thenable
+      then: () => Yup.number().min(1).max(Yup.ref("length_to")),
+      otherwise: () => Yup.number().min(1),
+    }),
+
+    length_to: Yup.number().when("length_from", {
+      is: (length_from: number | undefined) => length_from,
+      // eslint-disable-next-line unicorn/no-thenable
+      then: () => Yup.number().min(Yup.ref("length_from")),
+      otherwise: () => Yup.number().min(1),
+    }),
+  },
+  [["length_from", "length_to"]],
+)
+
 const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
-  const { searchQuery, filterQuery } = useTypedSelector(
-    (state) => state.proteins,
-  )
+  const { searchQuery, filterQuery } = useTypedSelector((state) => state.search)
 
   const [availableFilters, setAvailableFilters] = useState<null | {
     organism: FilterValue[]
@@ -60,7 +78,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
         let protein_with: FilterValue[] = []
         let score: FilterValue[] = []
 
-        response.data.facets.forEach((facet) => {
+        response.data.facets?.forEach((facet) => {
           if (facet.label === "Popular organisms") {
             organism = facet.values
           }
@@ -105,8 +123,12 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
         </button>
       </div>
 
-      <Formik initialValues={filterQuery} onSubmit={handleFiltersSubmit}>
-        {({ dirty, handleSubmit }) => (
+      <Formik
+        initialValues={filterQuery}
+        onSubmit={handleFiltersSubmit}
+        validationSchema={validationSchema}
+      >
+        {({ dirty, handleSubmit, errors, isValid }) => (
           <Form
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -139,7 +161,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
               >
                 <option value="">{"Select an option"}</option>
                 {availableFilters &&
-                  availableFilters.organism.map((organism) => {
+                  availableFilters.organism?.map((organism) => {
                     return (
                       <option value={organism.value} key={organism.value}>
                         {organism.label}
@@ -158,7 +180,11 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
                   name="length_from"
                   type="text"
                   placeholder="From"
-                  className="filters__input"
+                  className={`filters__input ${
+                    errors.length_from || errors.length_to
+                      ? "filters__input--error"
+                      : ""
+                  }`}
                 />
               </div>
 
@@ -170,7 +196,11 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
                   name="length_to"
                   type="text"
                   placeholder="To"
-                  className="filters__input"
+                  className={`filters__input ${
+                    errors.length_from || errors.length_to
+                      ? "filters__input--error"
+                      : ""
+                  }`}
                 />
               </div>
             </div>
@@ -188,7 +218,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
               >
                 <option value="">{"Select an option"}</option>
                 {availableFilters &&
-                  availableFilters.score.map((score) => {
+                  availableFilters.score?.map((score) => {
                     return (
                       <option value={score.value} key={score.value}>
                         {score.value}
@@ -211,7 +241,7 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
               >
                 <option value="">{"Select"}</option>
                 {availableFilters &&
-                  availableFilters.protein_with.map((option) => {
+                  availableFilters.protein_with?.map((option) => {
                     return (
                       <option value={option.value} key={option.value}>
                         {option.label}
@@ -228,7 +258,11 @@ const Filters: FC<FiltersProps> = ({ className, setFiltersOpened }) => {
               >
                 {"Cancel"}
               </button>
-              <button className="button" type="submit" disabled={!dirty}>
+              <button
+                className="button"
+                type="submit"
+                disabled={!(dirty && isValid)}
+              >
                 {"Apply filters"}
               </button>
             </div>

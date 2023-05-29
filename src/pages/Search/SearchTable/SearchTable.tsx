@@ -13,7 +13,7 @@ import {
   setLink,
   setProteins,
   setSort,
-} from "../../../redux/slices/proteinSlice.ts"
+} from "../../../redux/slices/searchSlice.ts"
 import { Protein } from "../../../types/Protein.ts"
 import { SortByType, SortDirectionType } from "../../../types/sortType.ts"
 import {
@@ -26,7 +26,7 @@ import { HeaderSortableRenderer } from "./headerRenderers.tsx"
 
 const SearchTable: FC = () => {
   const { totalResults, proteins, link, sort } = useTypedSelector(
-    (state) => state.proteins,
+    (state) => state.search,
   )
 
   const [isLoading, setIsLoading] = useState<boolean>(false)

@@ -1,4 +1,4 @@
-.not-found{
+.not-found {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@
     background: #FFFFFF;
 }
 
-.not-found__block{
+.not-found__block {
     display: flex;
 
     flex-direction: column;
@@ -18,7 +18,7 @@
     align-items: center;
 }
 
-.not-found__404{
+.not-found__404 {
     font-style: normal;
     font-weight: 600;
     font-size: 72px;
@@ -28,7 +28,7 @@
     margin-bottom: 10px;
 }
 
-.not-found__text{
+.not-found__text {
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -39,7 +39,7 @@
     margin-bottom: 20px;
 }
 
-.not-found__back-btn{
+.not-found__back-btn {
     font-style: normal;
     font-weight: 700;
     font-size: 12px;

@@ -59,6 +59,7 @@ const PublicationComponent: FC<PublicationComponentProps> = ({
           )
         })}
       </div>
+
       {/* Categories */}
       <div className="publication__description">
         <span className="publication__description-title">{"Categories: "}</span>

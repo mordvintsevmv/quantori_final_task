@@ -1,6 +1,6 @@
 import "./NotFound.css"
 
-import { FC, Fragment } from "react"
+import { FC, Fragment, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import Header from "../../components/Header/Header.tsx"
@@ -10,7 +10,7 @@ const NotFound: FC = () => {
   const navigate = useNavigate()
 
   const { user } = useTypedSelector((state) => state.auth)
-  const { searchQuery } = useTypedSelector((state) => state.proteins)
+  const { searchQuery } = useTypedSelector((state) => state.search)
 
   const handleBackClick = () => {
     if (user) {
@@ -21,6 +21,10 @@ const NotFound: FC = () => {
       navigate("/")
     }
   }
+
+  useEffect(() => {
+    document.title = "404 Page"
+  }, [])
 
   return (
     <Fragment>
