@@ -37,7 +37,7 @@ export const fetchProteins = createAsyncThunk(
       const { search } = thunkAPI.getState() as RootState
 
       const { proteins, totalResults, link } = await getUniprotProteinsAsync(
-        search.searchQuery || "",
+        search.searchQuery || "*",
         search.sort,
         search.filterQuery,
       )
@@ -97,7 +97,6 @@ const searchSlice = createSlice({
     builder.addCase(fetchProteins.rejected, (state) => {
       state.proteins = []
       state.totalResults = 0
-      state.searchQuery = null
       state.status = statusType.ERROR
     })
   },

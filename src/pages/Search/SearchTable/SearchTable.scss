@@ -203,7 +203,8 @@
   border-radius: 2px;
 
   background: transparent;
-  img{
+
+  img {
     height: 12px;
   }
 }
@@ -212,7 +213,7 @@
   cursor: not-allowed;
 }
 
-.search-table__sortable-header-btn--active{
+.search-table__sortable-header-btn--active {
   background: rgba(60, 134, 244, .12);
 }
 

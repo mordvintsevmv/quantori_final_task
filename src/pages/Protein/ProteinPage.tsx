@@ -89,6 +89,7 @@ const ProteinPage: FC = () => {
 
   useEffect(() => {
     if (id) {
+      // Fetching Detailed protein
       uniprotSearch
         .get(id)
         .then((response) => {
@@ -105,6 +106,7 @@ const ProteinPage: FC = () => {
           })
         })
 
+      // Fetching publications
       uniprotSearch
         .get(`${id}/publications`)
         .then((response) => {
@@ -238,7 +240,7 @@ const ProteinPage: FC = () => {
 
             <TabPanel>
               {publications &&
-                publications.map((publication) => (
+                publications?.map((publication) => (
                   <PublicationComponent
                     key={publication.citation.id}
                     className="protein-details__publication"

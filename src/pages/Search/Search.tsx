@@ -23,7 +23,7 @@ const Search: FC = () => {
     useTypedSelector((state) => state.search)
 
   const [searchParams, setSearchParams] = useSearchParams()
-  const searchQueryURL = searchParams.get("query")
+  const searchQueryURI = searchParams.get("query")
 
   const [isFiltersOpened, setIsFiltersOpened] = useState<boolean>(false)
 
@@ -57,22 +57,24 @@ const Search: FC = () => {
     setIsFiltersOpened(!isFiltersOpened)
   }
 
+  // Fetching new Proteins on every sort, filters or search query changing
   useEffect(() => {
     if (searchQuery) {
       dispatch(fetchProteins())
     }
   }, [dispatch, sort, filterQuery, searchQuery])
 
+  // Receiving search query from URI
   useEffect(() => {
-    if (searchQueryURL && searchRef.current) {
-      searchRef.current.value = searchQueryURL
-      dispatch(setSearchQuery(searchQueryURL))
+    if (searchQueryURI && searchRef.current) {
+      searchRef.current.value = searchQueryURI
+      dispatch(setSearchQuery(searchQueryURI))
     }
 
-    document.title = searchQueryURL
-      ? `Searching for "${searchQueryURL}"`
+    document.title = searchQueryURI
+      ? `Searching for "${searchQueryURI}"`
       : `Q-1 Search`
-  }, [dispatch, searchQueryURL])
+  }, [dispatch, searchQueryURI])
 
   return (
     <Fragment>
@@ -111,7 +113,9 @@ const Search: FC = () => {
 
         <div className="search__content">
           {status === statusType.LOADING && <Loading />}
-          {[statusType.IDLE, statusType.SUCCESS].includes(status) &&
+          {[statusType.IDLE, statusType.SUCCESS, statusType.ERROR].includes(
+            status,
+          ) &&
             totalResults === 0 && <SearchPlaceholder />}
           {status === statusType.SUCCESS && totalResults !== 0 && (
             <SearchResults />
