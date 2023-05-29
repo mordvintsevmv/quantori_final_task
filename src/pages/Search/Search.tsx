@@ -93,6 +93,7 @@ const Search: FC = () => {
           </button>
           <div className="search__filters-btn-wrapper">
             <button
+              disabled={!searchQuery}
               className={`search__filters-btn ${
                 isFiltersOpened ? "search__filters-btn--active" : ""
               } ${
