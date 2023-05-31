@@ -4,6 +4,7 @@ export const getErrorMessage = (error: unknown) => {
   if (error instanceof FirebaseError) {
     switch (error.code) {
       case "auth/email-already-exists":
+      case "auth/email-already-in-use":
         return "User already exist!"
       case "auth/user-not-found":
         return "There is no such user!"
