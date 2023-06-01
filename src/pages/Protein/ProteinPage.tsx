@@ -13,6 +13,7 @@ import { uniprotSearch } from "../../api/uniProt.ts"
 import Header from "../../components/Header/Header.tsx"
 import Loading from "../../components/Loading/Loading.tsx"
 import PublicationComponent from "../../components/PublicationComponent/PublicationComponent.tsx"
+import { useTypedSelector } from "../../hooks/reduxHooks.ts"
 import { ProteinDetailed } from "../../types/ProteinDetailed.ts"
 import { Publication } from "../../types/Publication.ts"
 import {
@@ -50,6 +51,7 @@ const convertDate = (date: string) => {
 
 const ProteinPage: FC = () => {
   const { id } = useParams()
+  const { searchQuery } = useTypedSelector((state) => state.search)
 
   const [protein, setProtein] = useState<ProteinDetailed | null>(null)
   const [publications, setPublications] = useState<Publication[] | null>(null)
@@ -57,7 +59,11 @@ const ProteinPage: FC = () => {
   const navigate = useNavigate()
 
   const handleBack = () => {
-    navigate(-1)
+    if (searchQuery) {
+      navigate(-1)
+    } else {
+      navigate("/search")
+    }
   }
 
   const handleCopy = () => {
