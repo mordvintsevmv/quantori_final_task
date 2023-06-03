@@ -1,0 +1,136 @@
+.search {
+    position: relative;
+
+    width: 100vw;
+    height: calc(100vh - 48px);
+}
+
+.search__controls {
+    padding-top: 30px;
+
+    display: flex;
+
+    flex-direction: row;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.search__input {
+    width: 778px;
+    height: 40px;
+
+    border-radius: 8px;
+    outline: 1px solid #D9D9D9;
+    border: 0;
+
+    padding: 10px 16px;
+}
+
+.search__input:focus {
+    outline: 1px solid #9F9F9F;
+}
+
+.search__filters-btn-wrapper {
+    position: relative;
+}
+
+.search__search-btn {
+    width: 179px;
+    color: #3C86F4;
+
+    border-radius: 8px;
+}
+
+.search__filters-btn--selected:before {
+    content: "";
+
+    position: absolute;
+    top: -3px;
+    right: -3px;
+
+    width: 12px;
+    height: 12px;
+    background: #3C86F4;
+
+    border-radius: 50%;
+}
+
+.search__filters {
+    position: absolute;
+
+    top: 75px;
+    right: 210px;
+
+    z-index: 100;
+}
+
+.search__content {
+    height: calc(100% - 100px);
+    width: 1020px;
+
+    margin: 0 auto;
+}
+
+.search__placeholder {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    height: 100%;
+}
+
+.search__results {
+    margin-top: 30px;
+}
+
+.search__count {
+    text-align: left;
+}
+
+.search__filters-btn {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 40px;
+    height: 40px;
+
+    background: rgba(60, 134, 244, .2);
+
+    border-radius: 8px;
+}
+
+.search__filters-btn:hover {
+    background: rgba(60, 134, 244, .25);
+}
+
+.search__filters-btn:active {
+    background: rgba(60, 134, 244, .35);
+}
+
+.search__filters-btn--active {
+    background: #3C86F4;
+}
+
+.search__filters-btn--active:hover {
+    background: rgba(60, 134, 244, 0.8);
+}
+
+.search__filters-btn--active img {
+    filter: invert(0) brightness(0) invert(100);
+}
+
+.search__filters-btn:disabled {
+    background: #CFCFCF;
+
+    cursor: not-allowed;
+}
+
+.search__filters-btn:disabled img {
+    filter: invert(0) brightness(0) opacity(0.3);
+}

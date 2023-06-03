@@ -1,0 +1,156 @@
+.auth {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-image: url("../../assets/dna-background.png");
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+}
+
+.auth-modal {
+  position: absolute;
+
+  width: 456px;
+  height: fit-content;
+
+  text-align: center;
+
+  padding: 27px 30px;
+
+  background: #FFFFFF;
+
+  border-radius: 12px;
+}
+
+.auth__title {
+  margin-bottom: 18px;
+}
+
+.auth__form-element {
+
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+
+    text-align: left;
+
+    margin-bottom: 1px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+
+    color: #2B2B2B;;
+  }
+
+  input {
+    width: 395px;
+    height: 48px;
+
+    padding: 14px;
+
+    border-radius: 8px;
+    border: 0;
+
+    background: #F5F5F5;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+
+    color: #000000;
+  }
+
+
+  input::placeholder {
+    color: #6C6C6C;
+  }
+
+  input:not(:placeholder-shown) {
+    background: #FFFFFF;
+  }
+
+  input:focus {
+    background: #FFFFFF;
+  }
+
+  &:last-of-type {
+    margin-bottom: 24px;
+  }
+}
+
+.auth__valid-error {
+  text-align: left;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+
+  color: #EC3030;
+
+  margin-top: 2px;
+}
+
+.auth__auth-error {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 12px;
+
+  text-align: center;
+
+  color: #EC3030;
+
+  margin-bottom: 20px;
+}
+
+.auth__input--error {
+  outline: 2px solid #EC3030;
+}
+
+.auth__input--valid {
+  &:not(:placeholder-shown) {
+    outline: 1px solid #9F9F9F;
+  }
+
+  &:focus {
+    outline: 2px solid #3C86F4;
+  }
+
+}
+
+.auth__auth-type {
+  display: inline;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: #000000;
+}
+
+.auth__auth-type--link {
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.auth__button {
+  width: 100%;
+
+  margin-bottom: 7px;
+
+  color: #175BC0;
+}

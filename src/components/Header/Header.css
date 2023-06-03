@@ -1,0 +1,52 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+
+    padding-right: 130px;
+
+    width: 100vw;
+    height: 48px;
+
+    background: #FFFFFF;
+
+    border-bottom: 1px solid #D8E7FF;
+}
+
+.header__auth {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+
+    gap: 30px;
+}
+
+.header__email {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+
+    color: #2B2B2B;
+}
+
+.header__log-btn {
+    all: unset;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+
+    color: #7EA0D2;
+
+    cursor: pointer;
+}
+
+.header__log-btn:hover {
+    color: #3C86F4;
+}
+
+.header__log-btn:active {
+    color: #3C86F4;
+}
